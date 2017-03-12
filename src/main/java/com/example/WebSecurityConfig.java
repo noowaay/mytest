@@ -29,14 +29,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
-	@Bean
+	/*@Bean
     public InternalResourceViewResolver internalResourceViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/resources/templates/");
         resolver.setSuffix(".html");
         return resolver;
     }
-	
+	*/
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/resources/**", "/login.html", "/partials/**", "/", "/error/**");
@@ -46,10 +46,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		//http.csrf().disable();
 		
-		http.authorizeRequests().antMatchers("/register").permitAll().antMatchers("/").hasRole("MEMBER")
-				.antMatchers("/admin").hasRole("ADMIN").and().formLogin().loginPage("/login").usernameParameter("email")
-				.passwordParameter("password").defaultSuccessUrl("/").failureUrl("/login?error").and()
-				.exceptionHandling().accessDeniedPage("/403");
+		 http
+         .authorizeRequests()
+             .antMatchers("/register").permitAll()
+             .antMatchers("/").hasRole("MEMBER")
+             .antMatchers("/admin").hasRole("ADMIN")
+             .and()
+         .formLogin()
+             .loginPage("/login")
+             .usernameParameter("email")
+             .passwordParameter("password")
+             .defaultSuccessUrl("/")
+             .failureUrl("/login?error")
+             .and()
+         .exceptionHandling()
+             .accessDeniedPage("/403");
 	}
 
 }
